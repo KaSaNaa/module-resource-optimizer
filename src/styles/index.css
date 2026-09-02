@@ -75,3 +75,193 @@ body {
 .placeholder p {
   font-style: italic;
 }
+
+h4 {
+  margin: 1rem 0 0.5rem;
+  color: var(--primary-color);
+}
+
+.task-input-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.task-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.task-input-row label,
+.capacity-input {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: #555;
+  gap: 0.25rem;
+}
+
+.task-input-row input,
+.capacity-input input,
+.cost-lookup input {
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.task-input-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.dependency-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.dependency-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.dependency-input-empty {
+  color: #999;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+button {
+  align-self: flex-start;
+  background: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #bbb;
+  cursor: not-allowed;
+}
+
+.task-list {
+  list-style: none;
+}
+
+.task-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.task-list-item button {
+  background: var(--accent-color);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.task-list-empty {
+  color: #999;
+  font-style: italic;
+}
+
+.task-deps {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.form-error {
+  color: var(--accent-color);
+  font-size: 0.9rem;
+}
+
+.algorithm-selector {
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.algorithm-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.algorithm-description {
+  display: block;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.results-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+.results-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.results-stat-label {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.results-stat-value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.execution-order {
+  padding-left: 1.5rem;
+}
+
+.results-empty {
+  color: #999;
+  font-style: italic;
+}
+
+.cost-lookup {
+  margin-top: 1rem;
+}
+
+.cost-lookup label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: #555;
+  gap: 0.25rem;
+  max-width: 200px;
+}
+
+.cost-lookup-result {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.benchmark-note,
+.benchmark-error {
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}

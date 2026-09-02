@@ -1,0 +1,150 @@
+[
+  {
+    "algorithm": "dp",
+    "n": 10,
+    "capacity": 25,
+    "runtimeMs": 0.07837499999999409,
+    "operationsCount": 260,
+    "totalValue": 80
+  },
+  {
+    "algorithm": "branch-and-bound",
+    "n": 10,
+    "capacity": 25,
+    "runtimeMs": 0.18274999999999864,
+    "operationsCount": 16,
+    "totalValue": 80
+  },
+  {
+    "algorithm": "greedy",
+    "n": 10,
+    "capacity": 25,
+    "runtimeMs": 0.033541999999997074,
+    "operationsCount": 10,
+    "totalValue": 80
+  },
+  {
+    "algorithm": "dp",
+    "n": 50,
+    "capacity": 125,
+    "runtimeMs": 0.20537500000000364,
+    "operationsCount": 6300,
+    "totalValue": 370
+  },
+  {
+    "algorithm": "branch-and-bound",
+    "n": 50,
+    "capacity": 125,
+    "runtimeMs": 0.06750000000000966,
+    "operationsCount": 38,
+    "totalValue": 370
+  },
+  {
+    "algorithm": "greedy",
+    "n": 50,
+    "capacity": 125,
+    "runtimeMs": 0.02679200000000037,
+    "operationsCount": 50,
+    "totalValue": 370
+  },
+  {
+    "algorithm": "dp",
+    "n": 100,
+    "capacity": 250,
+    "runtimeMs": 0.1818749999999909,
+    "operationsCount": 25100,
+    "totalValue": 822
+  },
+  {
+    "algorithm": "branch-and-bound",
+    "n": 100,
+    "capacity": 250,
+    "runtimeMs": 0.20170799999999645,
+    "operationsCount": 142,
+    "totalValue": 822
+  },
+  {
+    "algorithm": "greedy",
+    "n": 100,
+    "capacity": 250,
+    "runtimeMs": 0.060624999999987494,
+    "operationsCount": 100,
+    "totalValue": 821
+  },
+  {
+    "algorithm": "dp",
+    "n": 500,
+    "capacity": 1250,
+    "runtimeMs": 4.738208,
+    "operationsCount": 625500,
+    "totalValue": 4448
+  },
+  {
+    "algorithm": "branch-and-bound",
+    "n": 500,
+    "capacity": 1250,
+    "runtimeMs": 0.3351249999999908,
+    "operationsCount": 443,
+    "totalValue": 4448
+  },
+  {
+    "algorithm": "greedy",
+    "n": 500,
+    "capacity": 1250,
+    "runtimeMs": 0.0938329999999894,
+    "operationsCount": 500,
+    "totalValue": 4448
+  },
+  {
+    "algorithm": "dp",
+    "n": 1000,
+    "capacity": 2500,
+    "runtimeMs": null,
+    "operationsCount": null,
+    "totalValue": null,
+    "skipped": true,
+    "skipReason": "n * capacity = 2500000 exceeds practical DP table size (2000000)"
+  },
+  {
+    "algorithm": "branch-and-bound",
+    "n": 1000,
+    "capacity": 2500,
+    "runtimeMs": 8.506625,
+    "operationsCount": 7400,
+    "totalValue": 8764
+  },
+  {
+    "algorithm": "greedy",
+    "n": 1000,
+    "capacity": 2500,
+    "runtimeMs": 0.3009169999999983,
+    "operationsCount": 1000,
+    "totalValue": 8764
+  },
+  {
+    "algorithm": "dp",
+    "n": 5000,
+    "capacity": 12500,
+    "runtimeMs": null,
+    "operationsCount": null,
+    "totalValue": null,
+    "skipped": true,
+    "skipReason": "n * capacity = 62500000 exceeds practical DP table size (2000000)"
+  },
+  {
+    "algorithm": "branch-and-bound",
+    "n": 5000,
+    "capacity": 12500,
+    "runtimeMs": 21.252500000000012,
+    "operationsCount": 5695,
+    "totalValue": 42732
+  },
+  {
+    "algorithm": "greedy",
+    "n": 5000,
+    "capacity": 12500,
+    "runtimeMs": 1.1396249999999952,
+    "operationsCount": 5000,
+    "totalValue": 42732
+  }
+]

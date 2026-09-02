@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { ModuleFederationPlugin } = require('webpack').container;
 
 module.exports = {
@@ -13,11 +14,14 @@ module.exports = {
     clean: true,
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },
   devServer: {
     port: 3005,
     historyApiFallback: true,
+    static: {
+      directory: path.resolve(__dirname, 'public'),
+    },
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
@@ -32,7 +36,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.tsx?$|\.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -40,6 +44,7 @@ module.exports = {
             presets: [
               '@babel/preset-env',
               ['@babel/preset-react', { runtime: 'automatic' }],
+              '@babel/preset-typescript',
             ],
           },
         },
@@ -65,6 +70,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
       favicon: false,
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: 'public/benchmark-results.json', to: 'benchmark-results.json', noErrorOnMissing: true }],
     }),
   ],
 };
