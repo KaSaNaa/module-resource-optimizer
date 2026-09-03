@@ -15,12 +15,12 @@ export function CostLookup({ tasks }: CostLookupProps) {
   return (
     <div className="cost-lookup">
       <label>
-        Find tasks near cost
-        <input type="number" value={target} onChange={(e) => setTarget(e.target.value)} placeholder="e.g. 5" disabled={tasks.length === 0} />
+        Find projects near a budget of ($)
+        <input type="number" value={target} onChange={(e) => setTarget(e.target.value)} placeholder="e.g. 20000" disabled={tasks.length === 0} />
       </label>
       {result && (
         <p className="cost-lookup-result">
-          Closest cost: <strong>{result.matchedCost}</strong> — {result.tasks.map((task) => task.name).join(', ')}
+          Closest budget: <strong>${result.matchedCost.toLocaleString()}</strong> ({result.tasks.map((task) => task.name).join(', ')})
         </p>
       )}
     </div>

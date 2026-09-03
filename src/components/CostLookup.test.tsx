@@ -6,28 +6,28 @@ import type { Task } from '../core';
 import { CostLookup } from './CostLookup';
 
 const tasks: Task[] = [
-  { id: 'a', name: 'Task A', cost: 5, value: 3, dependsOn: [] },
-  { id: 'b', name: 'Task B', cost: 20, value: 4, dependsOn: [] },
+  { id: 'a', name: 'Project A', cost: 5, value: 3, dependsOn: [] },
+  { id: 'b', name: 'Project B', cost: 20, value: 4, dependsOn: [] },
 ];
 
 describe('CostLookup', () => {
-  it('shows nothing before a target cost is entered', () => {
+  it('shows nothing before a target budget is entered', () => {
     render(<CostLookup tasks={tasks} />);
-    expect(screen.queryByText(/closest cost/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/closest budget/i)).not.toBeInTheDocument();
   });
 
-  it('finds the nearest task by cost as the user types', async () => {
+  it('finds the nearest project by budget as the user types', async () => {
     const user = userEvent.setup();
     render(<CostLookup tasks={tasks} />);
 
-    await user.type(screen.getByLabelText(/find tasks near cost/i), '8');
+    await user.type(screen.getByLabelText(/find projects near a budget of/i), '8');
 
-    expect(screen.getByText(/closest cost/i)).toBeInTheDocument();
-    expect(screen.getByText(/Task A/)).toBeInTheDocument();
+    expect(screen.getByText(/closest budget/i)).toBeInTheDocument();
+    expect(screen.getByText(/Project A/)).toBeInTheDocument();
   });
 
-  it('disables the input when there are no tasks', () => {
+  it('disables the input when there are no projects', () => {
     render(<CostLookup tasks={[]} />);
-    expect(screen.getByLabelText(/find tasks near cost/i)).toBeDisabled();
+    expect(screen.getByLabelText(/find projects near a budget of/i)).toBeDisabled();
   });
 });

@@ -1,22 +1,17 @@
 import React from 'react';
 import type { AlgorithmName } from '../core';
+import { ALGORITHM_COPY } from './algorithmCopy';
 
 interface AlgorithmSelectorProps {
   value: AlgorithmName;
   onChange: (algorithm: AlgorithmName) => void;
 }
 
-const OPTIONS: Array<{ value: AlgorithmName; label: string; description: string }> = [
-  { value: 'dp', label: 'Dynamic Programming', description: 'Exact, O(n·capacity) time/space' },
-  { value: 'branch-and-bound', label: 'Branch & Bound', description: 'Exact, best-first search with pruning' },
-  { value: 'greedy', label: 'Greedy', description: 'Heuristic, value/cost ratio, not always optimal' },
-];
-
 export function AlgorithmSelector({ value, onChange }: AlgorithmSelectorProps) {
   return (
     <fieldset className="algorithm-selector">
-      <legend>Algorithm</legend>
-      {OPTIONS.map((option) => (
+      <legend>How should we pick?</legend>
+      {ALGORITHM_COPY.map((option) => (
         <label key={option.value} className="algorithm-option">
           <input
             type="radio"
@@ -26,7 +21,9 @@ export function AlgorithmSelector({ value, onChange }: AlgorithmSelectorProps) {
             onChange={() => onChange(option.value)}
           />
           <span>
-            <strong>{option.label}</strong>
+            <strong>
+              {option.label} <span className="technical-name">({option.technicalName})</span>
+            </strong>
             <span className="algorithm-description">{option.description}</span>
           </span>
         </label>

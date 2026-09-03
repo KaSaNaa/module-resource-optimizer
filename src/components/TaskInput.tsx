@@ -9,14 +9,30 @@ interface TaskInputProps {
 }
 
 interface Draft {
-  id: string;
   name: string;
   cost: string;
   value: string;
   dependsOn: string[];
 }
 
-const EMPTY_DRAFT: Draft = { id: '', name: '', cost: '', value: '', dependsOn: [] };
+const EMPTY_DRAFT: Draft = { name: '', cost: '', value: '', dependsOn: [] };
+
+/**
+ * The core Task type needs a stable id, but a manager entering projects by
+ * name shouldn't have to think about ids — so this adapter derives one from
+ * the name (web-layer only; Task/OptimizationRequest in core is unchanged).
+ */
+function generateProjectId(name: string, existingIds: string[]): string {
+  const base = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'project';
+  if (!existingIds.includes(base)) {
+    return base;
+  }
+  let suffix = 2;
+  while (existingIds.includes(`${base}-${suffix}`)) {
+    suffix += 1;
+  }
+  return `${base}-${suffix}`;
+}
 
 export function TaskInput({ tasks, onAddTask, onRemoveTask }: TaskInputProps) {
   const [draft, setDraft] = useState<Draft>(EMPTY_DRAFT);
@@ -25,29 +41,26 @@ export function TaskInput({ tasks, onAddTask, onRemoveTask }: TaskInputProps) {
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const id = draft.id.trim();
+    const name = draft.name.trim();
     const cost = Number(draft.cost);
     const value = Number(draft.value);
 
-    if (id === '') {
-      setFormError('Task id is required.');
-      return;
-    }
-    if (tasks.some((task) => task.id === id)) {
-      setFormError(`Task id "${id}" is already in use.`);
+    if (name === '') {
+      setFormError('Project name is required.');
       return;
     }
     if (!Number.isFinite(cost) || cost <= 0) {
-      setFormError('Cost must be a positive number.');
+      setFormError('Budget required must be a positive number.');
       return;
     }
     if (!Number.isFinite(value) || value <= 0) {
-      setFormError('Value must be a positive number.');
+      setFormError('Expected value / ROI score must be a positive number.');
       return;
     }
 
     setFormError(null);
-    onAddTask({ id, name: draft.name.trim() || id, cost, value, dependsOn: draft.dependsOn });
+    const id = generateProjectId(name, tasks.map((task) => task.id));
+    onAddTask({ id, name, cost, value, dependsOn: draft.dependsOn });
     setDraft(EMPTY_DRAFT);
   }
 
@@ -56,46 +69,47 @@ export function TaskInput({ tasks, onAddTask, onRemoveTask }: TaskInputProps) {
       <form onSubmit={handleSubmit} className="task-input-form" noValidate>
         <div className="task-input-row">
           <label>
-            Id
-            <input value={draft.id} onChange={(e) => setDraft({ ...draft, id: e.target.value })} placeholder="e.g. build" />
+            Project name
+            <input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="e.g. Website Redesign" />
           </label>
           <label>
-            Name
-            <input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="e.g. Build artifact" />
-          </label>
-          <label>
-            Cost
+            Budget required ($)
             <input type="number" min="1" value={draft.cost} onChange={(e) => setDraft({ ...draft, cost: e.target.value })} />
           </label>
           <label>
-            Value
+            Expected value / ROI score
             <input type="number" min="1" value={draft.value} onChange={(e) => setDraft({ ...draft, value: e.target.value })} />
           </label>
         </div>
 
         <div className="task-input-dependencies">
-          <span className="task-input-label">Depends on</span>
+          <span className="task-input-label">Must be completed after</span>
           <DependencyInput availableTasks={tasks} selectedIds={draft.dependsOn} onChange={(dependsOn) => setDraft({ ...draft, dependsOn })} />
         </div>
 
         {formError && <p className="form-error">{formError}</p>}
 
-        <button type="submit">Add task</button>
+        <button type="submit">Add project</button>
       </form>
 
       <ul className="task-list">
         {tasks.map((task) => (
           <li key={task.id} className="task-list-item">
             <span>
-              <strong>{task.name}</strong> ({task.id}) — cost {task.cost}, value {task.value}
-              {task.dependsOn.length > 0 && <span className="task-deps"> depends on: {task.dependsOn.join(', ')}</span>}
+              <strong>{task.name}</strong> (${task.cost.toLocaleString()} budget, {task.value} ROI points)
+              {task.dependsOn.length > 0 && (
+                <span className="task-deps">
+                  {' '}
+                  (must be completed after: {task.dependsOn.map((depId) => tasks.find((t) => t.id === depId)?.name ?? depId).join(', ')})
+                </span>
+              )}
             </span>
-            <button type="button" onClick={() => onRemoveTask(task.id)} aria-label={`Remove ${task.id}`}>
+            <button type="button" onClick={() => onRemoveTask(task.id)} aria-label={`Remove ${task.name}`}>
               Remove
             </button>
           </li>
         ))}
-        {tasks.length === 0 && <li className="task-list-empty">No tasks added yet.</li>}
+        {tasks.length === 0 && <li className="task-list-empty">No candidate projects added yet.</li>}
       </ul>
     </div>
   );

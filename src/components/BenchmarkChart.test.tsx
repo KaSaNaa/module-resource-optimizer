@@ -30,13 +30,14 @@ describe('BenchmarkChart', () => {
     expect(screen.getByText(/loading benchmark results/i)).toBeInTheDocument();
   });
 
-  it('renders a note about skipped DP runs once data loads', async () => {
+  it('renders a plain-language note about the skipped method once data loads, with the technical name in brackets', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({ ok: true, json: async () => sampleRecords }),
     );
     render(<BenchmarkChart />);
-    expect(await screen.findByText(/DP was skipped for n = 5000/)).toBeInTheDocument();
+    expect(await screen.findByText(/One method .* was left out for portfolios of 5000 projects/)).toBeInTheDocument();
+    expect(screen.getByText(/\(Dynamic Programming\)/)).toBeInTheDocument();
   });
 
   it('shows an error message when the fetch fails', async () => {

@@ -4,12 +4,11 @@ import { render, screen, waitForElementToBeRemoved } from '@testing-library/reac
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
-async function addTask(user: ReturnType<typeof userEvent.setup>, id: string, name: string, cost: string, value: string) {
-  await user.type(screen.getByLabelText('Id'), id);
-  await user.type(screen.getByLabelText('Name'), name);
-  await user.type(screen.getByLabelText('Cost'), cost);
-  await user.type(screen.getByLabelText('Value'), value);
-  await user.click(screen.getByRole('button', { name: /add task/i }));
+async function addProject(user: ReturnType<typeof userEvent.setup>, name: string, cost: string, value: string) {
+  await user.type(screen.getByLabelText('Project name'), name);
+  await user.type(screen.getByLabelText('Budget required ($)'), cost);
+  await user.type(screen.getByLabelText('Expected value / ROI score'), value);
+  await user.click(screen.getByRole('button', { name: /add project/i }));
 }
 
 describe('App', () => {
@@ -27,40 +26,54 @@ describe('App', () => {
     vi.unstubAllGlobals();
   });
 
-  it('runs the optimizer end-to-end after adding tasks and shows results', async () => {
+  it('runs the optimizer end-to-end after adding projects and shows a decision summary', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await addTask(user, 'setup', 'Setup', '2', '5');
-    await addTask(user, 'build', 'Build', '3', '8');
+    await addProject(user, 'Setup', '2', '5');
+    await addProject(user, 'Build', '3', '8');
 
-    await user.click(screen.getByRole('button', { name: /run optimization/i }));
+    await user.click(screen.getByRole('button', { name: /get recommendation/i }));
 
-    expect(await screen.findByText(/Result —/)).toBeInTheDocument();
-    expect(screen.getByText(/Setup \(setup\)/)).toBeInTheDocument();
-    expect(screen.getByText(/Build \(build\)/)).toBeInTheDocument();
+    expect(await screen.findByText(/Approved/)).toBeInTheDocument();
+    expect(screen.getByText(/Suggested rollout order: Setup → Build/)).toBeInTheDocument();
   });
 
-  it('shows a validation error instead of results when capacity is invalid', async () => {
+  it('shows a validation error instead of a decision when the budget is invalid', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await addTask(user, 'setup', 'Setup', '2', '5');
+    await addProject(user, 'Setup', '2', '5');
 
-    const capacityInput = screen.getByLabelText(/resource capacity/i);
+    const capacityInput = screen.getByLabelText(/total available budget/i);
     await user.clear(capacityInput);
     await user.type(capacityInput, '0');
 
-    await user.click(screen.getByRole('button', { name: /run optimization/i }));
+    await user.click(screen.getByRole('button', { name: /get recommendation/i }));
 
     expect(await screen.findByText(/capacity must be a positive number/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Result —/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Approved/)).not.toBeInTheDocument();
   });
 
-  it('disables Run optimization until at least one task exists', async () => {
+  it('disables Get recommendation until at least one project exists', async () => {
     render(<App />);
-    expect(screen.getByRole('button', { name: /run optimization/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /get recommendation/i })).toBeDisabled();
     // Let the BenchmarkChart's fetch settle so it doesn't resolve after this test tears down.
     await waitForElementToBeRemoved(() => screen.queryByText(/loading benchmark results/i));
+  });
+
+  it('loading the example scenario pre-fills projects and budget, ready to run', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /load example scenario/i }));
+
+    expect(screen.getAllByText('Customer Portal Upgrade').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Data Warehouse Migration').length).toBeGreaterThan(0);
+    expect(screen.getByLabelText(/total available budget/i)).toHaveValue(70000);
+    expect(screen.getByRole('button', { name: /get recommendation/i })).toBeEnabled();
+
+    await user.click(screen.getByRole('button', { name: /get recommendation/i }));
+    expect(await screen.findByText(/Approved/)).toBeInTheDocument();
   });
 });

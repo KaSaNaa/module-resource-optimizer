@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { ALGORITHM_COPY_BY_VALUE } from './algorithmCopy';
 
 interface BenchmarkRecord {
   algorithm: 'dp' | 'branch-and-bound' | 'greedy';
@@ -23,12 +24,6 @@ const ALGORITHM_COLORS: Record<BenchmarkRecord['algorithm'], string> = {
   dp: '#2c3e50',
   'branch-and-bound': '#3498db',
   greedy: '#27ae60',
-};
-
-const ALGORITHM_LABELS: Record<BenchmarkRecord['algorithm'], string> = {
-  dp: 'Dynamic Programming',
-  'branch-and-bound': 'Branch & Bound',
-  greedy: 'Greedy',
 };
 
 function toChartRows(records: BenchmarkRecord[]): ChartRow[] {
@@ -81,19 +76,19 @@ export function BenchmarkChart() {
 
   return (
     <div className="benchmark-chart">
-      <ResponsiveContainer width="100%" height={320}>
-        <LineChart data={chartRows} margin={{ top: 8, right: 24, bottom: 8, left: 0 }}>
+      <ResponsiveContainer width="100%" height={430}>
+        <LineChart data={chartRows} margin={{ top: 8, right: 24, bottom: 28, left: 16 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="n" label={{ value: 'Number of tasks (n)', position: 'insideBottom', offset: -4 }} />
-          <YAxis label={{ value: 'Runtime (ms)', angle: -90, position: 'insideLeft' }} />
+          <XAxis dataKey="n" label={{ value: 'Number of candidate projects (n)', position: 'bottom', offset: 0 }} />
+          <YAxis label={{ value: 'Time taken (ms)', angle: -90, position: 'insideLeft', offset: -4 }} />
           <Tooltip />
-          <Legend />
+          <Legend verticalAlign="bottom" wrapperStyle={{ paddingTop: 24, lineHeight: '1.8rem' }} />
           {(['dp', 'branch-and-bound', 'greedy'] as const).map((algorithm) => (
             <Line
               key={algorithm}
               type="monotone"
               dataKey={algorithm}
-              name={ALGORITHM_LABELS[algorithm]}
+              name={`${ALGORITHM_COPY_BY_VALUE[algorithm].shortLabel} (${ALGORITHM_COPY_BY_VALUE[algorithm].technicalName})`}
               stroke={ALGORITHM_COLORS[algorithm]}
               connectNulls={false}
             />
@@ -103,8 +98,9 @@ export function BenchmarkChart() {
 
       {skippedNotes.length > 0 && (
         <p className="benchmark-note">
-          DP was skipped for n = {skippedNotes.map((r) => r.n).join(', ')} — pseudo-polynomial blow-up makes the DP table too large to be
-          practical at that capacity.
+          One method ({ALGORITHM_COPY_BY_VALUE.dp.technicalName}) was left out for portfolios of{' '}
+          {skippedNotes.map((r) => r.n).join(' and ')} projects: it's only fast for a small number of projects, and at that size,
+          checking every affordable combination exactly needs too much memory to stay practical.
         </p>
       )}
     </div>

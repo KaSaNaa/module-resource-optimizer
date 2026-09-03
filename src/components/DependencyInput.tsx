@@ -17,11 +17,11 @@ export function DependencyInput({ availableTasks, selectedIds, onChange }: Depen
   }
 
   if (availableTasks.length === 0) {
-    return <p className="dependency-input-empty">No other tasks yet to depend on.</p>;
+    return <p className="dependency-input-empty">No other projects added yet.</p>;
   }
 
   return (
-    <div className="dependency-input" role="group" aria-label="Depends on">
+    <div className="dependency-input" role="group" aria-label="Must be completed after">
       {availableTasks.map((task) => (
         <label key={task.id} className="dependency-checkbox">
           <input type="checkbox" checked={selectedIds.includes(task.id)} onChange={() => toggle(task.id)} />
