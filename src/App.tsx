@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './styles/index.css';
+import './styles/idss-theme.css';
 import type { AlgorithmName, OptimizationResult, Task } from './core';
 import { optimize, OptimizationValidationError } from './core';
 import { TaskInput } from './components/TaskInput';
